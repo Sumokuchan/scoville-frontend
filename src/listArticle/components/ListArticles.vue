@@ -1,16 +1,16 @@
 <template>
   <v-container fluid grid-list>
     <v-layout row wrap>
-      <v-card v-for="article in articles" :key="article._id">
+      <v-card v-for="article in articles" :key="article._id" style="margin: 10px;">
         <v-card-title primary-title>
-          <div>
-            <div class="headline">{{ article.title }}</div>
-            <span> {{article.content}} </span>
-          </div>
+          <div class="headline">{{ article.title }}</div>
         </v-card-title>
+        <v-card-text>
+          <div v-html="parseMarkdown(article.content)"></div>
+        </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn> Read More </v-btn>
+          <v-btn :to="`article/${article._id}`"> Read More </v-btn>
         </v-card-actions>
       </v-card>
     </v-layout>
@@ -18,6 +18,8 @@
 </template>
 
 <script>
+import marked from "marked";
+
 export default {
   name: "ListArticles",
 
@@ -35,6 +37,12 @@ export default {
         }
       })
       .then(articles => (this.articles = articles))
+  },
+
+  methods: {
+    parseMarkdown(content) {
+      return marked(content)
+    }
   }
 }
 </script>

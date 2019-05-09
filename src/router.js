@@ -19,7 +19,7 @@ export default new Router({
       // which is lazy-loaded when the route is visited.
       component: () =>
         import(
-          /* webpackChunkName: "create-article" */ "./article/components/Article.vue"
+          /* webpackChunkName: "article" */ "./article/components/Article.vue"
         )
     },
     {
