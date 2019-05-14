@@ -1,35 +1,63 @@
 <template>
-  <form v-on:submit.prevent="onPublish()">
-      <v-flex>
-        <v-text-field
-          placeholder="Article Title"
-          v-model="article.title"
-          outline
-        ></v-text-field>
-      </v-flex>
+  <div>
+    <v-card>
+      <v-card-title primary-title>
+        <div>
+          <div class="headline">Create your article</div>
+          <span class="grey--text">Lorem Ipsum</span>
+        </div>
+      </v-card-title>
+      <v-card-text>
+        <form v-on:submit.prevent="onPublish()">
+            <v-flex>
+              <v-text-field
+                label="Article Title"
+                v-model="article.title"
+              ></v-text-field>
+            </v-flex>
 
-      <v-flex>
-        <v-textarea
-          outline
-          v-model="article.content"
-          placeholder="Write your article. (Markdown)"
-        ></v-textarea>
-      </v-flex>
+            <v-flex>
+              <v-textarea
+                label="Write your article. (Markdown)"
+                v-model="article.content"
+              ></v-textarea>
+            </v-flex>
 
-      <v-flex>
-        <v-text-field
-          placeholder="Author"
-          v-model="article.author"
-          outline
-        ></v-text-field>
-      </v-flex>
-    <v-btn color="success" @click="onPublish()">
-      Publish Article
-    </v-btn>
-  </form>
+            <v-flex>
+              <v-text-field
+                label="Author"
+                v-model="article.author"
+              ></v-text-field>
+            </v-flex>    
+        </form>
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn color="success" @click="onPublish()">
+          Publish Article
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+
+    <v-snackbar
+      v-model="snackbar"
+      bottom
+      :color="color"
+    >
+      {{ message }}
+      <v-btn
+        flat
+        @click="snackbar = false"
+      >
+        Close
+      </v-btn>
+    </v-snackbar>
+  </div>
 </template>
 
 <script>
+import publishArticle from "@/api/publishArticle.js"
+
 export default {
   name: "CreateArticle",
 
@@ -37,22 +65,31 @@ export default {
     return {
       article: {
         title: "",
-        content: ""
+        content: "",
+        author: "",
+        created: ""
       },
-      inProgress: false
+      inProgress: false,
+      snackbar: false,
+      message: "",
+      color: "success"
     }
   },
 
   methods: {
     onPublish() {
-      this.article.created = new Date().toLocaleDateString("fr-FR")
-      fetch("http://localhost:3000/articles", {
-        method: "POST",
-        body: JSON.stringify(this.article),
-        headers: {
-          "Content-Type": "application/json"
+      this.article.created = new Date().toISOString()
+      
+      publishArticle(this.article).then(response => {
+        if(response.ok) {
+          this.$router.push('/')
+        } else {
+          this.color = "error"
+          this.message = "Something bad happened."
+          this.snackbar = true
+          throw new Error("Scoville Backend::publishArticle error...")
         }
-      }).then(r => console.log(r))
+      })
     }
   }
 }
