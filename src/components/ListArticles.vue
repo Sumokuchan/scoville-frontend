@@ -19,6 +19,7 @@
 
 <script>
 import marked from "marked";
+import fetchAllArticles from "@/api/fetchAllArticles.js"
 
 export default {
   name: "ListArticles",
@@ -30,11 +31,13 @@ export default {
   },
 
   mounted() {
-    fetch("http://localhost:3000/articles")
+    fetchAllArticles()
       .then(response => {
         if (response.ok) {
           return response.json()
-        }
+        } else {
+        throw new Error("Scoville Backend::fetchAllArticles error...")
+      }
       })
       .then(articles => (this.articles = articles))
   },

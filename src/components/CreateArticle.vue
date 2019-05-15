@@ -4,7 +4,6 @@
       <v-card-title primary-title>
         <div>
           <div class="headline">Create your article</div>
-          <span class="grey--text">Lorem Ipsum</span>
         </div>
       </v-card-title>
       <v-card-text>

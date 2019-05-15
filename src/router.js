@@ -1,6 +1,6 @@
 import Vue from "vue"
 import Router from "vue-router"
-import ListArticles from "@/listArticle/components/ListArticles.vue"
+import ListArticles from "@/components/ListArticles.vue"
 
 Vue.use(Router)
 
@@ -18,9 +18,7 @@ export default new Router({
       // this generates a separate chunk (create-article.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () =>
-        import(
-          /* webpackChunkName: "article" */ "./article/components/Article.vue"
-        )
+        import(/* webpackChunkName: "article" */ "./components/Article.vue")
     },
     {
       path: "/create",
@@ -30,7 +28,7 @@ export default new Router({
       // which is lazy-loaded when the route is visited.
       component: () =>
         import(
-          /* webpackChunkName: "create-article" */ "./createArticle/components/CreateArticle.vue"
+          /* webpackChunkName: "create-article" */ "./components/CreateArticle.vue"
         )
     }
   ]

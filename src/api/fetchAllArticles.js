@@ -1,10 +1,9 @@
 import config from "@/config.js"
 
-export default article => {
-  const url = `${config.baseUrl}/articles`
+export default () => {
+  const url = `${config.baseUrl}/articles/`
   return fetch(url, {
-    method: "POST",
-    body: JSON.stringify(article),
+    method: "GET",
     headers: {
       "Content-Type": "application/json"
     }
